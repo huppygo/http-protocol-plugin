@@ -1,15 +1,15 @@
-# ʹ��golang��alpine�汾��Ϊ��������
+# 使用golang的alpine版本作为基础镜像
 FROM golang:alpine
-# ���ù���Ŀ¼
+# 设置工作目录
 WORKDIR /app
-# ����ǰĿ¼�����ݸ��Ƶ������е�/appĿ¼
+# 将当前目录的内容复制到容器中的/app目录
 COPY . .
-# ����Goģ��֧�֣�������Go����
+# 设置Go模块支持，并设置Go代理
 ENV GO111MODULE=on
-ENV GOPROXY="https://goproxy.io/zh/"
-# ����GoӦ�ó���
+ENV GOPROXY="https://goproxy.io"
+# 编译Go应用程序
 RUN go build -o myapp main.go
-# ��¶9988�˿�
+# 暴露9988端口
 EXPOSE 9988
-# ������������ʱ���е�����
+# 设置容器启动时运行的命令
 ENTRYPOINT ["./myapp"]
