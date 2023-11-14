@@ -6,7 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-
+	"log"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
 
@@ -71,20 +72,31 @@ func (w *TpController) DeleteDevice(ctx *gin.Context) {
 
 //接收属性
 func (w *TpController) Attributes(ctx *gin.Context) {
-	accesstoken := ctx.Param("accesstoken")
+	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
+	bodyJson := make(map[string]interface{})
+	if err := json.Unmarshal(body, &bodyJson); err != nil {
+		log.Println("json转换失败", err)
+		return err
+	}
+	accesstoken := bodyJson["imei"].(string)
 	if err := service.TpSer.Attributes(accesstoken, body); err != nil {
 		Response.Failed(ctx)
 	} else {
 		Response.OK(ctx)
 	}
-
 }
 
 //接收事件数据
 func (w *TpController) Event(ctx *gin.Context) {
-	accesstoken := ctx.Param("accesstoken")
+	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
+	bodyJson, err := json.Marshal(body)
+	if err != nil {
+		log.Println("json转换失败", err)
+		return err
+	}
+	accesstoken := gjson.Get(bodyJson, "imei").(string)
 	if err := service.TpSer.Event(accesstoken, body); err != nil {
 		Response.Failed(ctx)
 	} else {
@@ -94,8 +106,14 @@ func (w *TpController) Event(ctx *gin.Context) {
 
 //接收命令响应数据
 func (w *TpController) CommandReply(ctx *gin.Context) {
-	accesstoken := ctx.Param("accesstoken")
+	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
+	bodyJson, err := json.Marshal(body)
+	if err != nil {
+		log.Println("json转换失败", err)
+		return err
+	}
+	accesstoken := gjson.Get(bodyJson, "imei").(string)
 	if err := service.TpSer.CommandReply(accesstoken, body); err != nil {
 		Response.Failed(ctx)
 	} else {
