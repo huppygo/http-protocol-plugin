@@ -91,12 +91,12 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 func (w *TpController) Event(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	bodyJson, err := json.Marshal(body)
-	if err != nil {
+	bodyJson := make(map[string]interface{})
+	if err := json.Unmarshal(body, &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
-	accesstoken := gjson.Get(bodyJson, "imei").(string)
+	accesstoken := bodyJson["imei"].(string)
 	if err := service.TpSer.Event(accesstoken, body); err != nil {
 		Response.Failed(ctx)
 	} else {
@@ -108,12 +108,12 @@ func (w *TpController) Event(ctx *gin.Context) {
 func (w *TpController) CommandReply(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	bodyJson, err := json.Marshal(body)
-	if err != nil {
+	bodyJson := make(map[string]interface{})
+	if err := json.Unmarshal(body, &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
-	accesstoken := gjson.Get(bodyJson, "imei").(string)
+	accesstoken := bodyJson["imei"].(string)
 	if err := service.TpSer.CommandReply(accesstoken, body); err != nil {
 		Response.Failed(ctx)
 	} else {
