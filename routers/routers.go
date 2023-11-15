@@ -6,7 +6,7 @@ import (
 	"http-procotol-plugin/global"
 	"http-procotol-plugin/service"
 	"strings"
-
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,9 +21,9 @@ func RegisterRouter(router *gin.Engine) {
 		c.POST("device/config/add", tp.AddDevice)       //新增网关子设备
 		c.POST("device/config/delete", tp.DeleteDevice) //删除设备配
 		//提供给设备的接口
-		c.POST("device/:accesstoken/attributes", tp.Attributes)      //属性上报
-		c.POST("device/:accesstoken/event", tp.Event)                //事件上报
-		c.POST("device/:accesstoken/command/reply", tp.CommandReply) //命令执行结果上报
+		c.POST("device/attributes", tp.Attributes)      //属性上报
+		c.POST("device/event", tp.Event)                //事件上报
+		c.POST("device/command/reply", tp.CommandReply) //命令执行结果上报
 
 	}
 }
@@ -37,7 +37,7 @@ func IsAuthDevice() gin.HandlerFunc {
 			bodyJson := make(map[string]interface{})
 			if err := json.Unmarshal(body, &bodyJson); err != nil {
 				log.Println("json转换失败", err)
-				return err
+			//	return err
 			}
 			accesstoken := bodyJson["imei"].(string)
 			if _, ok := global.DevicesMap.Load(accesstoken); !ok {
