@@ -77,7 +77,7 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 	bodyJson := make(map[string]interface{})
 	if err := json.Unmarshal(body, &bodyJson); err != nil {
 		log.Println("json转换失败", err)
-		return err
+	//	return err
 	}
 	accesstoken := bodyJson["imei"].(string)
 	if err := service.TpSer.Attributes(accesstoken, body); err != nil {
@@ -94,7 +94,7 @@ func (w *TpController) Event(ctx *gin.Context) {
 	bodyJson, err := json.Marshal(body)
 	if err != nil {
 		log.Println("json转换失败", err)
-		return err
+	//	return err
 	}
 	accesstoken := gjson.Get(bodyJson, "imei").(string)
 	if err := service.TpSer.Event(accesstoken, body); err != nil {
@@ -111,7 +111,7 @@ func (w *TpController) CommandReply(ctx *gin.Context) {
 	bodyJson, err := json.Marshal(body)
 	if err != nil {
 		log.Println("json转换失败", err)
-		return err
+	//	return err
 	}
 	accesstoken := gjson.Get(bodyJson, "imei").(string)
 	if err := service.TpSer.CommandReply(accesstoken, body); err != nil {
