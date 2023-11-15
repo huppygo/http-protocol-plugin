@@ -6,6 +6,8 @@ import (
 	"http-procotol-plugin/global"
 	"http-procotol-plugin/service"
 	"strings"
+	"io/ioutil"
+	"log"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
