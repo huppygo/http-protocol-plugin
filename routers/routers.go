@@ -36,12 +36,18 @@ func IsAuthDevice() gin.HandlerFunc {
 		if !strings.Contains(url, "config") {
 			//accesstoken := c.Param("accesstoken")
 			body, _ := ioutil.ReadAll(c.Request.Body)
+			log.Println("body")
+			log.Println(body)
 			bodyJson := make(map[string]interface{})
+			log.Println("bodyJson")
+			log.Println(bodyJson)
 			if err := json.Unmarshal(body, &bodyJson); err != nil {
 				log.Println("json转换失败", err)
 			//	return err
 			}
 			accesstoken := bodyJson["imei"].(string)
+			log.Println("accesstoken")
+			log.Println(accesstoken)
 			if _, ok := global.DevicesMap.Load(accesstoken); !ok {
 				if err := service.TpDeviceAccessToken(accesstoken); err != nil {
 					c.AbortWithError(401, errors.New("device is unauth"))
