@@ -74,12 +74,18 @@ func (w *TpController) DeleteDevice(ctx *gin.Context) {
 func (w *TpController) Attributes(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
+	log.Println("body")
+	log.Println(body)
 	bodyJson := make(map[string]interface{})
 	if err := json.Unmarshal(body, &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
+	log.Println("bodyJson")
+	log.Println(bodyJson)
 	accesstoken := bodyJson["imei"].(string)
+	log.Println("accesstoken")
+	log.Println(accesstoken)
 	if err := service.TpSer.Attributes(accesstoken, body); err != nil {
 		Response.Failed(ctx)
 	} else {
