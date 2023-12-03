@@ -1,0 +1,20 @@
+server:
+  addr: :9988
+
+mqtt:
+  broker: iotgmqtt-0.iotgmqtt:1883 #mqtt服务端地址
+  username: root
+  password: root
+  attributes_topic: device/attributes #发送主题
+  status_topic: device/status #状态主题
+  event_topic: device/event #事件主题
+  command_topic: device/command/# #命令主题
+  topic_to_subscribe: plugin/http/# #订阅主题
+  subscribe_pool: 100 #客户端订阅处理并发池
+  db_type: timescaledb #数据库类型timescaledb和other
+
+thingspanel:
+  address: backend-0.backend:9999
+  offine_time: 60 #设备离线时间阈值，单位秒，默认60秒，优先使用tp平台中设置的值
+
+
