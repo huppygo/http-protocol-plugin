@@ -11,6 +11,7 @@ import (
 	"errors"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"fmt"
 )
 
 //相关视图，跳转至services里对应服务
@@ -72,99 +73,159 @@ func (w *TpController) DeleteDevice(ctx *gin.Context) {
 
 }
 
+//解析函数
+func processBodyJson(bodyJson []map[string]interface{}) map[string]interface{} { 
+	bodyData := make(map[string]interface{}) 
+	//log.Println("bodyJson Process", bodyJson)
+	 for i := 0; i < len(bodyJson); i++{
+	    //log.Println("bodyJson[i]:",bodyJson[i])
+	    if imei, exist := bodyJson[i]["imei"].(string); exist {
+	        bodyData["imei"] = imei
+	    }
+	    if local, exist := bodyJson[i]["local"].(string); exist {
+	        bodyData["local"] = local
+	    }
+		if recTime, exist := bodyJson[i]["recTime"]; exist {  
+			if recTimeFloat, ok := recTime.(float64); ok {  
+				recTimeString := fmt.Sprintf("%.0f", recTimeFloat)  
+				bodyData["recTime"] = recTimeString  
+			} else {  
+				// Handle error or log a warning  
+			}  
+		}
+	    if male, exist := bodyJson[i]["male"].(string); exist {
+            bodyData["male"] = male
+	    }
+	    if sys, exist := bodyJson[i]["sys"].(string); exist {
+	        if "000" != sys {
+	            bodyData["sys"] = sys
+	        }else{
+				if _, ok := bodyData["sys"]; !ok {  
+					bodyData["sys"] = sys  
+				}
+			}
+	    }
+		if dia, exist := bodyJson[i]["dia"].(string); exist {
+	        if "000" != dia {
+	            bodyData["dia"] = dia
+	        }else{
+				if _, ok := bodyData["dia"]; !ok {  
+					bodyData["dia"] = dia  
+				}
+			}
+	    }
+	    if pul, exist := bodyJson[i]["pul"].(string); exist {
+	        if "000" != pul {
+	            bodyData["pul"] = pul
+			}else{
+				if _, ok := bodyData["pul"]; !ok {  
+					bodyData["pul"] = pul  
+				}
+			}
+	    }
+	    if eat, exist := bodyJson[i]["eat"].(string); exist {
+	        bodyData["eat"] = eat
+	    }
+	    if glu, exist := bodyJson[i]["glu"].(string); exist {
+	        if "0.0" != glu {
+	            bodyData["glu"] = glu
+			}else{
+				if _, ok := bodyData["glu"]; !ok {  
+					bodyData["glu"] = glu  
+				}
+			}
+	    }
+	    if cho, exist := bodyJson[i]["cho"].(string); exist {
+	        if "0.0" != cho {
+	            bodyData["cho"] = cho
+			}else{
+				if _, ok := bodyData["cho"]; !ok {  
+					bodyData["cho"] = cho  
+				}
+			}
+	    }
+	    if tri, exist := bodyJson[i]["tri"].(string); exist {
+	        if "0.00" != tri {
+	            bodyData["tri"] = tri
+			}else{
+				if _, ok := bodyData["tri"]; !ok {  
+					bodyData["tri"] = tri  
+				}
+			}
+	    }
+	    if uri, exist := bodyJson[i]["uri"].(string); exist {
+	        if "000" != uri {
+	            bodyData["uri"] = uri
+			}else{
+				if _, ok := bodyData["uri"]; !ok {  
+					bodyData["uri"] = uri  
+				}
+			}
+	    }
+	    if xy, exist := bodyJson[i]["xy"].(string); exist {
+	        if "000" != xy {
+	            bodyData["xy"] = xy
+			}else{
+				if _, ok := bodyData["xy"]; !ok {  
+					bodyData["xy"] = xy  
+				}
+			}
+	    }
+	    if hr, exist := bodyJson[i]["hr"].(string); exist {
+	        if "000" != hr {
+	            bodyData["hr"] = hr
+			}else{
+				if _, ok := bodyData["hr"]; !ok {  
+					bodyData["hr"] = hr  
+				}
+			}
+	    }
+	    if tw, exist := bodyJson[i]["tw"].(string) ; exist {
+	        if "000" != tw {
+	            bodyData["tw"] = tw
+			}else{
+				if _, ok := bodyData["tw"]; !ok {  
+					bodyData["tw"] = tw  
+				}
+			}
+	    }
+	} 
+	return bodyData;
+}
+
 //接收属性
 func (w *TpController) Attributes(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
-	//body, _ := ioutil.ReadAll(ctx.Request.Body)
-	//bodyJson := make([]map[string]interface{})
-	var body = `[{"cho":"0.0","dia":"0.0","imei":"864383063591361","glu":"11.1"}, {"cho":"1.0","dia":"097","imei":"864383063591361","glu":"0.0"}, {"cho":"2.0","dia":"097","imei":"864383063591361","glu":"0.0"}]`
-	var bodyJson []map[string]interface{}
-	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
-		log.Println("json转换失败", err)
-	//	return err
-	}
-	log.Println("body:",body)
-	log.Println("bodyJson:",bodyJson)
+	body, _ := ioutil.ReadAll(ctx.Request.Body)
 
-	bodyData := make(map[string]interface{})
-	bodyObject_counts := len(bodyJson)
-	for i := 0; i < bodyObject_counts; i++{
-	    log.Println("bodyJson[i]:",bodyJson[i])
-	    if imei, exist := bodyJson[i]["imei"]; exist {
-	        bodyData["imei"] = imei.(string)
-	    }
-	    if local, exist := bodyJson[i]["local"]; exist {
-	        bodyData["local"] = local.(string)
-	    }
-	    if recTime, exist := bodyJson[i]["recTime"]; exist {
-	        bodyData["recTime"] = recTime.(string)
-	    }
-	    if male, exist := bodyJson[i]["male"]; exist {
-            bodyData["male"] = male.(string)
-	    }
-	    if sys, exist := bodyJson[i]["sys"]; exist {
-	        if "000" != sys.(string) {
-	            bodyData["sys"] = sys.(string)
-	        }
-	    }
-	    if dia, exist := bodyJson[i]["dia"]; exist {
-	        if "000" != dia.(string) {
-	            bodyData["dia"] = dia.(string)
-	        }
-	    }
-	    if pul, exist := bodyJson[i]["pul"]; exist {
-	        if "000" != pul.(string) {
-	            bodyData["pul"] = pul.(string)
-	        }
-	    }
-	    if eat, exist := bodyJson[i]["eat"]; exist {
-	        bodyData["eat"] = eat.(string)
-	    }
-	    if glu, exist := bodyJson[i]["glu"]; exist {
-	        if "0.0" != glu.(string) {
-	            bodyData["glu"] = glu.(string)
-	        }
-	    }
-	    if cho, exist := bodyJson[i]["cho"]; exist {
-	        if "0.0" != cho.(string) {
-	            bodyData["cho"] = cho.(string)
-	        }
-	    }
-	    if tri, exist := bodyJson[i]["tri"]; exist {
-	        if "0.0" != tri.(string) {
-	            bodyData["tri"] = tri.(string)
-	        }
-	    }
-	    if uri, exist := bodyJson[i]["uri"]; exist {
-	        if "000" != uri.(string) {
-	            bodyData["uri"] = uri.(string)
-	        }
-	    }
-	    if xy, exist := bodyJson[i]["xy"]; exist {
-	        if "000" != xy.(string) {
-	            bodyData["xy"] = xy.(string)
-	        }
-	    }
-	    if hr, exist := bodyJson[i]["hr"]; exist {
-	        if "000" != hr.(string) {
-	            bodyData["hr"] = hr.(string)
-	        }
-	    }
-	    if tw, exist := bodyJson[i]["tw"]; exist {
-	        if "000" != tw.(string) {
-	            bodyData["tw"] = tw.(string)
-	        }
-	    }
-	}
+	// 尝试解析为数组  
+	var bodyJson []map[string]interface{}  
+	DecodeBodyData := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(body), &bodyJson); err == nil {  
+		//fmt.Println("body 是数组") 		
+		//调用解析函数
+		DecodeBodyData = processBodyJson(bodyJson)
+	} else {  
+		// 如果解析为数组失败，尝试解析为对象  
+		var bodyMap map[string]interface{}  
+		if err := json.Unmarshal([]byte(body), &bodyMap); err == nil {  
+			DecodeBodyData = bodyMap
+		} else {  
+			log.Println("无法解析 body，可能不是有效的 JSON")  
+			Response.Failed(ctx)
+		}  
+	}  
 
-	accesstoken := bodyData["imei"].(string)
-	bodyOut, err := json.Marshal(bodyData)
+	accesstoken := DecodeBodyData["imei"].(string)
+	//log.Println("DecodeBodyData:",DecodeBodyData)
+	bodyOut, err := json.Marshal(DecodeBodyData)
 	if err == nil{
 	}else{
-	    //输出错误
-	    log.Println("json转换失败", err)
+		//输出错误
+		log.Println("json转换失败", err)
+		Response.Failed(ctx)
 	}
-	log.Println("bodyOut:",bodyOut)
+	//log.Println("bodyOut:",bodyOut)
 	//  查找是否注册设备
 	if _, ok := global.DevicesMap.Load(accesstoken); ok {
 		if err := service.TpSer.Attributes(accesstoken, bodyOut); err != nil {
@@ -183,90 +244,33 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 func (w *TpController) Event(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	//bodyJson := make([]map[string]interface{})
-	var bodyJson []map[string]interface{}
-	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
-		log.Println("json转换失败", err)
-	//	return err
-	}
 
-	bodyData := make(map[string]interface{})
-	bodyObject_counts := len(bodyJson)
-	for i := 0; i < bodyObject_counts; i++{
-	    
-	    if imei, exist := bodyJson[i]["imei"]; exist {
-	        bodyData["imei"] = imei.(string)
-	    }
-	    if local, exist := bodyJson[i]["local"]; exist {
-	        bodyData["local"] = local.(string)
-	    }
-	    if recTime, exist := bodyJson[i]["recTime"]; exist {
-	        bodyData["recTime"] = recTime.(string)
-	    }
-	    if male, exist := bodyJson[i]["male"]; exist {
-            bodyData["male"] = male.(string)
-	    }
-	    if sys, exist := bodyJson[i]["sys"]; exist {
-	        if "000" != sys.(string) {
-	            bodyData["sys"] = sys.(string)
-	        }
-	    }
-	    if dia, exist := bodyJson[i]["dia"]; exist {
-	        if "000" != dia.(string) {
-	            bodyData["dia"] = dia.(string)
-	        }
-	    }
-	    if pul, exist := bodyJson[i]["pul"]; exist {
-	        if "000" != pul.(string) {
-	            bodyData["pul"] = pul.(string)
-	        }
-	    }
-	    if eat, exist := bodyJson[i]["eat"]; exist {
-	        bodyData["eat"] = eat.(string)
-	    }
-	    if glu, exist := bodyJson[i]["glu"]; exist {
-	        if "0.0" != glu.(string) {
-	            bodyData["glu"] = glu.(string)
-	        }
-	    }
-	    if cho, exist := bodyJson[i]["cho"]; exist {
-	        if "0.0" != cho.(string) {
-	            bodyData["cho"] = cho.(string)
-	        }
-	    }
-	    if tri, exist := bodyJson[i]["tri"]; exist {
-	        if "0.0" != tri.(string) {
-	            bodyData["tri"] = tri.(string)
-	        }
-	    }
-	    if uri, exist := bodyJson[i]["uri"]; exist {
-	        if "000" != uri.(string) {
-	            bodyData["uri"] = uri.(string)
-	        }
-	    }
-	    if xy, exist := bodyJson[i]["xy"]; exist {
-	        if "000" != xy.(string) {
-	            bodyData["xy"] = xy.(string)
-	        }
-	    }
-	    if hr, exist := bodyJson[i]["hr"]; exist {
-	        if "000" != hr.(string) {
-	            bodyData["hr"] = hr.(string)
-	        }
-	    }
-	    if tw, exist := bodyJson[i]["tw"]; exist {
-	        if "000" != tw.(string) {
-	            bodyData["tw"] = tw.(string)
-	        }
-	    }
-	}
+	// 尝试解析为数组  
+	var bodyJson []map[string]interface{}  
+	DecodeBodyData := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(body), &bodyJson); err == nil {  
+		//fmt.Println("body 是数组") 		
+		//调用解析函数
+		DecodeBodyData = processBodyJson(bodyJson)
+	} else {  
+		// 如果解析为数组失败，尝试解析为对象  
+		var bodyMap map[string]interface{}  
+		if err := json.Unmarshal([]byte(body), &bodyMap); err == nil {  
+			DecodeBodyData = bodyMap
+		} else {  
+			log.Println("无法解析 body，可能不是有效的 JSON")  
+			Response.Failed(ctx)
+		}  
+	}  
 
-	accesstoken := bodyData["imei"].(string)
-	bodyOut, err := json.Marshal(bodyData)
+	accesstoken := DecodeBodyData["imei"].(string)
+	//log.Println("DecodeBodyData:",DecodeBodyData)
+	bodyOut, err := json.Marshal(DecodeBodyData)
 	if err == nil{
 	}else{
 	    //输出错误
 	    log.Println("json转换失败", err)
+		Response.Failed(ctx)
 	}
 
 	//  查找是否注册设备
@@ -287,90 +291,33 @@ func (w *TpController) Event(ctx *gin.Context) {
 func (w *TpController) CommandReply(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	//bodyJson := make([]map[string]interface{})
-	var bodyJson []map[string]interface{}
-	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
-		log.Println("json转换失败", err)
-	//	return err
-	}
-	
-	bodyData := make(map[string]interface{})
-	bodyObject_counts := len(bodyJson)
-	for i := 0; i < bodyObject_counts; i++{
-	    
-	    if imei, exist := bodyJson[i]["imei"]; exist {
-	        bodyData["imei"] = imei.(string)
-	    }
-	    if local, exist := bodyJson[i]["local"]; exist {
-	        bodyData["local"] = local.(string)
-	    }
-	    if recTime, exist := bodyJson[i]["recTime"]; exist {
-	        bodyData["recTime"] = recTime.(string)
-	    }
-	    if male, exist := bodyJson[i]["male"]; exist {
-            bodyData["male"] = male.(string)
-	    }
-	    if sys, exist := bodyJson[i]["sys"]; exist {
-	        if "000" != sys.(string) {
-	            bodyData["sys"] = sys.(string)
-	        }
-	    }
-	    if dia, exist := bodyJson[i]["dia"]; exist {
-	        if "000" != dia.(string) {
-	            bodyData["dia"] = dia.(string)
-	        }
-	    }
-	    if pul, exist := bodyJson[i]["pul"]; exist {
-	        if "000" != pul.(string) {
-	            bodyData["pul"] = pul.(string)
-	        }
-	    }
-	    if eat, exist := bodyJson[i]["eat"]; exist {
-	        bodyData["eat"] = eat.(string)
-	    }
-	    if glu, exist := bodyJson[i]["glu"]; exist {
-	        if "0.0" != glu.(string) {
-	            bodyData["glu"] = glu.(string)
-	        }
-	    }
-	    if cho, exist := bodyJson[i]["cho"]; exist {
-	        if "0.0" != cho.(string) {
-	            bodyData["cho"] = cho.(string)
-	        }
-	    }
-	    if tri, exist := bodyJson[i]["tri"]; exist {
-	        if "0.0" != tri.(string) {
-	            bodyData["tri"] = tri.(string)
-	        }
-	    }
-	    if uri, exist := bodyJson[i]["uri"]; exist {
-	        if "000" != uri.(string) {
-	            bodyData["uri"] = uri.(string)
-	        }
-	    }
-	    if xy, exist := bodyJson[i]["xy"]; exist {
-	        if "000" != xy.(string) {
-	            bodyData["xy"] = xy.(string)
-	        }
-	    }
-	    if hr, exist := bodyJson[i]["hr"]; exist {
-	        if "000" != hr.(string) {
-	            bodyData["hr"] = hr.(string)
-	        }
-	    }
-	    if tw, exist := bodyJson[i]["tw"]; exist {
-	        if "000" != tw.(string) {
-	            bodyData["tw"] = tw.(string)
-	        }
-	    }
-	}
 
-	accesstoken := bodyData["imei"].(string)
-	bodyOut, err := json.Marshal(bodyData)
+	// 尝试解析为数组  
+	var bodyJson []map[string]interface{}  
+	DecodeBodyData := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(body), &bodyJson); err == nil {  
+		//fmt.Println("body 是数组") 		
+		//调用解析函数
+		DecodeBodyData = processBodyJson(bodyJson)
+	} else {  
+		// 如果解析为数组失败，尝试解析为对象  
+		var bodyMap map[string]interface{}  
+		if err := json.Unmarshal([]byte(body), &bodyMap); err == nil {  
+			DecodeBodyData = bodyMap
+		} else {  
+			log.Println("无法解析 body，可能不是有效的 JSON")  
+			Response.Failed(ctx)
+		}  
+	}  
+
+	accesstoken := DecodeBodyData["imei"].(string)
+	//log.Println("DecodeBodyData:",DecodeBodyData)
+	bodyOut, err := json.Marshal(DecodeBodyData)
 	if err == nil{
 	}else{
 	    //输出错误
 	    log.Println("json转换失败", err)
+		Response.Failed(ctx)
 	}
 	
 	//  查找是否注册设备
