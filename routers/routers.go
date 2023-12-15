@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 	//"log"
 	//"io/ioutil"
-	"fmt"
 )
 
 func RegisterRouter(router *gin.Engine) {

@@ -11,7 +11,6 @@ import (
 	"errors"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-
 )
 
 //相关视图，跳转至services里对应服务
@@ -77,8 +76,9 @@ func (w *TpController) DeleteDevice(ctx *gin.Context) {
 func (w *TpController) Attributes(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	bodyJson := make(map[string]interface{})
-	if err := json.Unmarshal(body, &bodyJson); err != nil {
+	//bodyJson := make([]map[string]interface{})
+	var bodyJson []map[string]interface{}
+	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
@@ -87,69 +87,67 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 	bodyObject_counts := len(bodyJson)
 	for i := 0; i < bodyObject_counts; i++{
 	    
-	    data := bodyJson[i]
-
-	    if imei, exist := data["imei"]; exist {
+	    if imei, exist := bodyJson[i]["imei"]; exist {
 	        bodyData["imei"] = imei.(string)
 	    }
-	    if local, exist := data["local"]; exist {
+	    if local, exist := bodyJson[i]["local"]; exist {
 	        bodyData["local"] = local.(string)
 	    }
-	    if recTime, exist := data["recTime"]; exist {
+	    if recTime, exist := bodyJson[i]["recTime"]; exist {
 	        bodyData["recTime"] = recTime.(string)
 	    }
-	    if male, exist := data["male"]; exist {
+	    if male, exist := bodyJson[i]["male"]; exist {
             bodyData["male"] = male.(string)
 	    }
-	    if sys, exist := data["sys"]; exist {
+	    if sys, exist := bodyJson[i]["sys"]; exist {
 	        if "000" != sys.(string) {
 	            bodyData["sys"] = sys.(string)
 	        }
 	    }
-	    if dia, exist := data["dia"]; exist {
+	    if dia, exist := bodyJson[i]["dia"]; exist {
 	        if "000" != dia.(string) {
 	            bodyData["dia"] = dia.(string)
 	        }
 	    }
-	    if pul, exist := data["pul"]; exist {
+	    if pul, exist := bodyJson[i]["pul"]; exist {
 	        if "000" != pul.(string) {
 	            bodyData["pul"] = pul.(string)
 	        }
 	    }
-	    if eat, exist := data["eat"]; exist {
+	    if eat, exist := bodyJson[i]["eat"]; exist {
 	        bodyData["eat"] = eat.(string)
 	    }
-	    if glu, exist := data["glu"]; exist {
+	    if glu, exist := bodyJson[i]["glu"]; exist {
 	        if "0.0" != glu.(string) {
 	            bodyData["glu"] = glu.(string)
 	        }
 	    }
-	    if cho, exist := data["cho"]; exist {
+	    if cho, exist := bodyJson[i]["cho"]; exist {
 	        if "0.0" != cho.(string) {
 	            bodyData["cho"] = cho.(string)
 	        }
 	    }
-	    if tri, exist := data["tri"]; exist {
+	    if tri, exist := bodyJson[i]["tri"]; exist {
 	        if "0.0" != tri.(string) {
 	            bodyData["tri"] = tri.(string)
 	        }
 	    }
-	    if uri, exist := data["uri"]; exist {
+	    if uri, exist := bodyJson[i]["uri"]; exist {
 	        if "000" != uri.(string) {
 	            bodyData["uri"] = uri.(string)
 	        }
 	    }
-	    if xy, exist := data["xy"]; exist {
+	    if xy, exist := bodyJson[i]["xy"]; exist {
 	        if "000" != xy.(string) {
 	            bodyData["xy"] = xy.(string)
 	        }
 	    }
-	    if hr, exist := data["hr"]; exist {
+	    if hr, exist := bodyJson[i]["hr"]; exist {
 	        if "000" != hr.(string) {
 	            bodyData["hr"] = hr.(string)
 	        }
 	    }
-	    if tw, exist := data["tw"]; exist {
+	    if tw, exist := bodyJson[i]["tw"]; exist {
 	        if "000" != tw.(string) {
 	            bodyData["tw"] = tw.(string)
 	        }
@@ -182,8 +180,9 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 func (w *TpController) Event(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	bodyJson := make(map[string]interface{})
-	if err := json.Unmarshal(body, &bodyJson); err != nil {
+	//bodyJson := make([]map[string]interface{})
+	var bodyJson []map[string]interface{}
+	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
@@ -192,69 +191,67 @@ func (w *TpController) Event(ctx *gin.Context) {
 	bodyObject_counts := len(bodyJson)
 	for i := 0; i < bodyObject_counts; i++{
 	    
-	    data := bodyJson[i]
-
-	    if imei, exist := data["imei"]; exist {
+	    if imei, exist := bodyJson[i]["imei"]; exist {
 	        bodyData["imei"] = imei.(string)
 	    }
-	    if local, exist := data["local"]; exist {
+	    if local, exist := bodyJson[i]["local"]; exist {
 	        bodyData["local"] = local.(string)
 	    }
-	    if recTime, exist := data["recTime"]; exist {
+	    if recTime, exist := bodyJson[i]["recTime"]; exist {
 	        bodyData["recTime"] = recTime.(string)
 	    }
-	    if male, exist := data["male"]; exist {
+	    if male, exist := bodyJson[i]["male"]; exist {
             bodyData["male"] = male.(string)
 	    }
-	    if sys, exist := data["sys"]; exist {
+	    if sys, exist := bodyJson[i]["sys"]; exist {
 	        if "000" != sys.(string) {
 	            bodyData["sys"] = sys.(string)
 	        }
 	    }
-	    if dia, exist := data["dia"]; exist {
+	    if dia, exist := bodyJson[i]["dia"]; exist {
 	        if "000" != dia.(string) {
 	            bodyData["dia"] = dia.(string)
 	        }
 	    }
-	    if pul, exist := data["pul"]; exist {
+	    if pul, exist := bodyJson[i]["pul"]; exist {
 	        if "000" != pul.(string) {
 	            bodyData["pul"] = pul.(string)
 	        }
 	    }
-	    if eat, exist := data["eat"]; exist {
+	    if eat, exist := bodyJson[i]["eat"]; exist {
 	        bodyData["eat"] = eat.(string)
 	    }
-	    if glu, exist := data["glu"]; exist {
+	    if glu, exist := bodyJson[i]["glu"]; exist {
 	        if "0.0" != glu.(string) {
 	            bodyData["glu"] = glu.(string)
 	        }
 	    }
-	    if cho, exist := data["cho"]; exist {
+	    if cho, exist := bodyJson[i]["cho"]; exist {
 	        if "0.0" != cho.(string) {
 	            bodyData["cho"] = cho.(string)
 	        }
 	    }
-	    if tri, exist := data["tri"]; exist {
+	    if tri, exist := bodyJson[i]["tri"]; exist {
 	        if "0.0" != tri.(string) {
 	            bodyData["tri"] = tri.(string)
 	        }
 	    }
-	    if uri, exist := data["uri"]; exist {
+	    if uri, exist := bodyJson[i]["uri"]; exist {
 	        if "000" != uri.(string) {
 	            bodyData["uri"] = uri.(string)
 	        }
 	    }
-	    if xy, exist := data["xy"]; exist {
+	    if xy, exist := bodyJson[i]["xy"]; exist {
 	        if "000" != xy.(string) {
 	            bodyData["xy"] = xy.(string)
 	        }
 	    }
-	    if hr, exist := data["hr"]; exist {
+	    if hr, exist := bodyJson[i]["hr"]; exist {
 	        if "000" != hr.(string) {
 	            bodyData["hr"] = hr.(string)
 	        }
 	    }
-	    if tw, exist := data["tw"]; exist {
+	    if tw, exist := bodyJson[i]["tw"]; exist {
 	        if "000" != tw.(string) {
 	            bodyData["tw"] = tw.(string)
 	        }
@@ -287,8 +284,9 @@ func (w *TpController) Event(ctx *gin.Context) {
 func (w *TpController) CommandReply(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-	bodyJson := make(map[string]interface{})
-	if err := json.Unmarshal(body, &bodyJson); err != nil {
+	//bodyJson := make([]map[string]interface{})
+	var bodyJson []map[string]interface{}
+	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
@@ -297,69 +295,67 @@ func (w *TpController) CommandReply(ctx *gin.Context) {
 	bodyObject_counts := len(bodyJson)
 	for i := 0; i < bodyObject_counts; i++{
 	    
-	    data := bodyJson[i]
-
-	    if imei, exist := data["imei"]; exist {
+	    if imei, exist := bodyJson[i]["imei"]; exist {
 	        bodyData["imei"] = imei.(string)
 	    }
-	    if local, exist := data["local"]; exist {
+	    if local, exist := bodyJson[i]["local"]; exist {
 	        bodyData["local"] = local.(string)
 	    }
-	    if recTime, exist := data["recTime"]; exist {
+	    if recTime, exist := bodyJson[i]["recTime"]; exist {
 	        bodyData["recTime"] = recTime.(string)
 	    }
-	    if male, exist := data["male"]; exist {
+	    if male, exist := bodyJson[i]["male"]; exist {
             bodyData["male"] = male.(string)
 	    }
-	    if sys, exist := data["sys"]; exist {
+	    if sys, exist := bodyJson[i]["sys"]; exist {
 	        if "000" != sys.(string) {
 	            bodyData["sys"] = sys.(string)
 	        }
 	    }
-	    if dia, exist := data["dia"]; exist {
+	    if dia, exist := bodyJson[i]["dia"]; exist {
 	        if "000" != dia.(string) {
 	            bodyData["dia"] = dia.(string)
 	        }
 	    }
-	    if pul, exist := data["pul"]; exist {
+	    if pul, exist := bodyJson[i]["pul"]; exist {
 	        if "000" != pul.(string) {
 	            bodyData["pul"] = pul.(string)
 	        }
 	    }
-	    if eat, exist := data["eat"]; exist {
+	    if eat, exist := bodyJson[i]["eat"]; exist {
 	        bodyData["eat"] = eat.(string)
 	    }
-	    if glu, exist := data["glu"]; exist {
+	    if glu, exist := bodyJson[i]["glu"]; exist {
 	        if "0.0" != glu.(string) {
 	            bodyData["glu"] = glu.(string)
 	        }
 	    }
-	    if cho, exist := data["cho"]; exist {
+	    if cho, exist := bodyJson[i]["cho"]; exist {
 	        if "0.0" != cho.(string) {
 	            bodyData["cho"] = cho.(string)
 	        }
 	    }
-	    if tri, exist := data["tri"]; exist {
+	    if tri, exist := bodyJson[i]["tri"]; exist {
 	        if "0.0" != tri.(string) {
 	            bodyData["tri"] = tri.(string)
 	        }
 	    }
-	    if uri, exist := data["uri"]; exist {
+	    if uri, exist := bodyJson[i]["uri"]; exist {
 	        if "000" != uri.(string) {
 	            bodyData["uri"] = uri.(string)
 	        }
 	    }
-	    if xy, exist := data["xy"]; exist {
+	    if xy, exist := bodyJson[i]["xy"]; exist {
 	        if "000" != xy.(string) {
 	            bodyData["xy"] = xy.(string)
 	        }
 	    }
-	    if hr, exist := data["hr"]; exist {
+	    if hr, exist := bodyJson[i]["hr"]; exist {
 	        if "000" != hr.(string) {
 	            bodyData["hr"] = hr.(string)
 	        }
 	    }
-	    if tw, exist := data["tw"]; exist {
+	    if tw, exist := bodyJson[i]["tw"]; exist {
 	        if "000" != tw.(string) {
 	            bodyData["tw"] = tw.(string)
 	        }
