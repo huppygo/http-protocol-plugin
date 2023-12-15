@@ -25,4 +25,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: huppygo/http-protocol-plugin:v0.1
+        tags: huppygo/http-protocol-plugin:v0.2
