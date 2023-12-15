@@ -75,18 +75,21 @@ func (w *TpController) DeleteDevice(ctx *gin.Context) {
 //接收属性
 func (w *TpController) Attributes(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
-	body, _ := ioutil.ReadAll(ctx.Request.Body)
+	//body, _ := ioutil.ReadAll(ctx.Request.Body)
 	//bodyJson := make([]map[string]interface{})
+	var body = `[{"cho":"0.0","dia":"0.0","imei":"864383063591361","glu":"11.1"}, {"cho":"1.0","dia":"097","imei":"864383063591361","glu":"0.0"}, {"cho":"2.0","dia":"097","imei":"864383063591361","glu":"0.0"}]`
 	var bodyJson []map[string]interface{}
 	if err := json.Unmarshal([]byte(body), &bodyJson); err != nil {
 		log.Println("json转换失败", err)
 	//	return err
 	}
+	log.Println("body:",body)
+	log.Println("bodyJson:",bodyJson)
 
 	bodyData := make(map[string]interface{})
 	bodyObject_counts := len(bodyJson)
 	for i := 0; i < bodyObject_counts; i++{
-	    
+	    log.Println("bodyJson[i]:",bodyJson[i])
 	    if imei, exist := bodyJson[i]["imei"]; exist {
 	        bodyData["imei"] = imei.(string)
 	    }
@@ -161,7 +164,7 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 	    //输出错误
 	    log.Println("json转换失败", err)
 	}
-
+	log.Println("bodyOut:",bodyOut)
 	//  查找是否注册设备
 	if _, ok := global.DevicesMap.Load(accesstoken); ok {
 		if err := service.TpSer.Attributes(accesstoken, bodyOut); err != nil {
