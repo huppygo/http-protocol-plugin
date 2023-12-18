@@ -197,7 +197,7 @@ func processBodyJson(bodyJson []map[string]interface{}) map[string]interface{} {
 func (w *TpController) Attributes(ctx *gin.Context) {
 	//accesstoken := ctx.Param("accesstoken")
 	body, _ := ioutil.ReadAll(ctx.Request.Body)
-
+	log.Println("bodyReceive:",body)
 	// 尝试解析为数组  
 	var bodyJson []map[string]interface{}  
 	DecodeBodyData := make(map[string]interface{})
@@ -217,7 +217,7 @@ func (w *TpController) Attributes(ctx *gin.Context) {
 	}  
 
 	accesstoken := DecodeBodyData["imei"].(string)
-	//log.Println("DecodeBodyData:",DecodeBodyData)
+	log.Println("DecodeBodyData:",DecodeBodyData)
 	bodyOut, err := json.Marshal(DecodeBodyData)
 	if err == nil{
 	}else{
